@@ -1,57 +1,96 @@
-# AI-Driven Web Intelligence for Sustainable E-Commerce
+# AI Web Scraper
 
 ## Overview
-This platform acts as an autonomous sustainability analyst. It scrapes e-commerce product pages, analyzes them for sustainability claims (using local AI), and provides grounded insights without hallucinations.
+AI Web Scraper is an AI-driven e-commerce intelligence platform for sustainable product analysis. It combines automated web scraping, content cleaning, semantic search, and a local RAG (Retrieval-Augmented Generation) pipeline to create grounded sustainability insights from product pages.
 
-## Key Features
-- **Advanced Scraping**: Powered by Playwright (Headless, Stealth Mode).
-- **Zero-Hallucination AI**: RAG pipeline uses ONLY scraped data.
-- **Local Intelligence**: Uses Ollama (Llama 3.2) for privacy and zero cost.
-- **Vector Database**: ChromaDB for semantic search.
+## Core Capabilities
+- Scrape e-commerce product pages and search result links using Playwright.
+- Clean and index scraped content into ChromaDB.
+- Use a local Ollama LLM (`llama3.2`) to answer sustainability and product analysis queries.
+- Provide a Streamlit dashboard for monitoring scraping, browsing analytics, and querying the knowledge base.
+- Expose backend API endpoints for scraping, analysis, documents, and metrics.
 
-## Installation
+## Repository Structure
+- `backend/`: FastAPI backend and API routes.
+- `frontend/streamlit/`: Streamlit-based UI and components.
+- `ai_engine/`: RAG pipeline, prompts, and Ollama LLM wrapper.
+- `scrapers/`: Scraper orchestrator and Playwright scraping logic.
+- `data/`: Content cleaning and ChromaDB storage utilities.
+- `requirements.txt`: Python dependencies.
+- `README.md`: Project documentation.
 
-1. **Prerequisites**:
-   - Python 3.9+
-   - [Ollama](https://ollama.com/) (Run `ollama pull llama3.2`)
+## Prerequisites
+- Python 3.9 or newer
+- [Ollama](https://ollama.com/) installed locally
+- Chromium browser via Playwright
 
-2. **Install Dependencies**:
+## Setup
+1. Create a Python virtual environment (recommended):
+   ```bash
+   python -m venv .venv
+   .venv\Scripts\activate
+   ```
+
+2. Install Python dependencies:
    ```bash
    pip install -r requirements.txt
+   ```
+
+3. Install Playwright browsers:
+   ```bash
    playwright install chromium
    ```
 
-## How to Run
+4. Install and run Ollama, then pull the required model:
+   ```bash
+   ollama pull llama3.2
+   ollama serve
+   ```
 
-### 1. Start the Backend (API & Scraper)
-*Use the special launcher for Windows compatibility:*
+## Running the Project
+
+### Start the Backend
 ```bash
 python backend/run.py
 ```
-*Port: 8000*
+- Backend API listens on `http://127.0.0.1:8001`
+- Health endpoint: `http://127.0.0.1:8001/health`
 
-### 2. Start the Frontend (UI)
+### Start the Frontend
 ```bash
 streamlit run frontend/streamlit/app.py
 ```
-*Port: 8501*
+- Streamlit UI is available at `http://localhost:8501`
 
-### 3. Start AI Engine
-```bash
-ollama serve
-```
+### Optional: Use the API Directly
+- `GET /health` — health check
+- `POST /api/scrape` — scrape a URL
+- `POST /api/analyze` — analyze a natural language query
+- `POST /api/chat` — chat-style RAG interaction
+- `GET /api/documents` — list stored documents
+- `POST /api/metrics` — generate sustainability metrics
 
-## Usage
-1. Open the Dashboard (http://localhost:8501).
-2. Go to **Scraper Control**.
-3. Enter a product URL (e.g., specific item page).
-4. Click **Start Scraping**.
-5. Go to **AI Analysis**.
-6. Ask: "Is this sustainable?", "What certifications does it have?".
+## Recommended Workflow
+1. Start Ollama and ensure `llama3.2` is available.
+2. Launch the backend:
+   ```bash
+   python backend/run.py
+   ```
+3. Launch the frontend:
+   ```bash
+   streamlit run frontend/streamlit/app.py
+   ```
+4. Use the UI to trigger scraping and request AI analysis.
 
-## Project Structure
-- `ai_engine/`: RAG pipeline and Prompts.
-- `backend/`: FastAPI application.
-- `data/`: ChromaDB storage.
-- `frontend/`: Streamlit application.
-- `scrapers/`: Playwright automation logic.
+## Notes
+- The scraper supports multiple modes: `single_page`, `website`, and `search`.
+- Scraped HTML is cleaned before saving into the vector store.
+- The RAG pipeline retrieves top documents from ChromaDB and generates answers using local LLM inference.
+
+## Troubleshooting
+- If the frontend reports the backend as offline, verify `backend/run.py` is running and reachable at `http://127.0.0.1:8001`.
+- If the LLM fails, confirm `ollama serve` is running and `llama3.2` is pulled.
+- If scraping fails on Windows, ensure Playwright Chromium is installed and the process has network access.
+
+## License
+This project is provided as-is for development and research use.
