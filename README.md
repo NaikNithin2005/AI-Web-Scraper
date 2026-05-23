@@ -92,5 +92,18 @@ streamlit run frontend/streamlit/app.py
 - If the LLM fails, confirm `ollama serve` is running and `llama3.2` is pulled.
 - If scraping fails on Windows, ensure Playwright Chromium is installed and the process has network access.
 
+## Screenshots
+The UI supports exploratory scraping, raw HTML previews, extracted insights, and a dark-mode dashboard.
+
+![Dashboard and Scraper Control](assets/screenshots/dashboard.png)
+
+![Scraping Options and Keyword Extraction](assets/screenshots/keywords-and-ai.png)
+
+![Content Summary and AI Insights](assets/screenshots/content-summary.png)
+
+![Raw HTML Body Preview](assets/screenshots/raw-html.png)
+
+> Place the screenshot images in `assets/screenshots/` with the file names shown above so the images render correctly.
+
 ## License
 This project is provided as-is for development and research use.
